@@ -1,0 +1,60 @@
+# -*- coding: utf-8 -*-
+'''通过读取comp_name.txt 文件中的单位信息，获取执业注册中心，某单位的注册岩土工程师信息'''
+from bs4 import BeautifulSoup
+from tkinter import *
+from tkinter.messagebox import showerror
+import requests
+
+def get_reg_status():
+    try:
+        s = requests.session()
+        s.headers[
+            'User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.62 Safari/537.36'
+
+        base_url = 'http://jzsc.mohurd.gov.cn'
+
+        url_1 = 'http://219.142.101.79/regist/wfProRegister.aspx?type=1'
+        post_data = {
+            '__VIEWSTATE': '/wEPDwUKMTg0NDgxOTgzNA8WBB4EdHlwZQUBMR4GZmlsdGVyZRYCAgEPZBYKZg8PFgIeBFRleHQFM+W7uuetkeW4iOOAgeWLmOWvn+iuvuiuoeW3peeoi+W4iOaJp+S4mui1hOagvOazqOWGjGRkAgEPEA8WBh4NRGF0YVRleHRGaWVsZAUPTUFOQUdFT1JHQU5OQU1FHg5EYXRhVmFsdWVGaWVsZAUOTUFOQUdFT1JHQU5OVU0eC18hRGF0YUJvdW5kZ2QQFSQG5YWo6YOoBuWMl+S6rAblpKnmtKUG5rKz5YyXBuWxseilvwnlhoXokpnlj6QG6L695a6BBuWQieaelwnpu5HpvpnmsZ8G5LiK5rW3Buaxn+iLjwbmtZnmsZ8G5a6J5b69Buemj+W7ugbmsZ/opb8G5bGx5LicBuays+WNlwbmuZbljJcG5rmW5Y2XBuW5v+S4nAblub/opb8G5rW35Y2XBua3seWcswbph43luoYG5Zub5bedBui0teW3ngbkupHljZcG6KW/6JePBumZleilvwbnlJjogoMG6Z2S5rW3BuWugeWkjwbmlrDnloYG5Y+w5rm+Bummmea4rwbmvrPpl6gVJAElAjExAjEyAjEzAjE0AjE1AjIxAjIyAjIzAjMxAjMyAjMzAjM0AjM1AjM2AjM3AjQxAjQyAjQzAjQ0AjQ1AjQ2AjQ3AjUwAjUxAjUyAjUzAjU0AjYxAjYyAjYzAjY0AjY1AjcxAjgxAjkxFCsDJGdnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2RkAgIPEA8WBh8DBRFTcGVjaWFsdHlUeXBlTmFtZR8EBRBTcGVjaWFsdHlUeXBlTnVtHwVnZBAVCgblhajpg6gV5LiA57qn5rOo5YaM5bu6562R5biIG+S4gOe6p+azqOWGjOe7k+aehOW3peeoi+W4iCHms6jlhozlnJ/mnKjlt6XnqIvluIjvvIjlsqnlnJ/vvIkt5rOo5YaM5YWs55So6K6+5aSH5bel56iL5biI77yI5pqW6YCa56m66LCD77yJLeazqOWGjOWFrOeUqOiuvuWkh+W3peeoi+W4iO+8iOe7meawtOaOkuawtO+8iSfms6jlhozlhaznlKjorr7lpIflt6XnqIvluIjvvIjliqjlipvvvIkn5rOo5YaM55S15rCU5bel56iL5biI77yI5Y+R6L6T5Y+Y55S177yJJOazqOWGjOeUteawlOW3peeoi+W4iO+8iOS+m+mFjeeUte+8iRXms6jlhozljJblt6Xlt6XnqIvluIgVCgElATECMTECMjECMzECMzICMzMCNDECNDICNjEUKwMKZ2dnZ2dnZ2dnZ2RkAggPDxYCHwIFKuivt+i+k+WFpeWnk+WQjeOAgei6q+S7veivgeafpeivouadoeS7tu+8gWRkAgkPPCsACwBkZBXFfaew6O+7qNQeI6k46jFVstH/',
+            '__EVENTVALIDATION': '/wEWOAK8vNaSAgKsm8npBwLYmoXqBwLYmoHqBwLYmr3qBwLYmrnqBwLYmrXqBwLZmoXqBwLZmoHqBwLZmr3qBwLamoXqBwLamoHqBwLamr3qBwLamrnqBwLamrXqBwLamrHqBwLamq3qBwLbmoXqBwLbmoHqBwLbmr3qBwLbmrnqBwLbmrXqBwLbmrHqBwLbmq3qBwLcmonqBwLcmoXqBwLcmoHqBwLcmr3qBwLcmrnqBwLdmoXqBwLdmoHqBwLdmr3qBwLdmrnqBwLdmrXqBwLemoXqBwLPmoXqBwLAmoXqBwK9+vXiAQLJ+/XiAQLJ+7nhAQLI+7nhAQLL+7nhAQLL+73hAQLL+4HhAQLK+7nhAQLK+73hAQLM+7nhAQKa09KQCALCl+WmDwKM54rGBgLM9PumDwKxi96RBQKWosD8CgL7uKJnAprpiTYC4M+E0gaa7LOmvZArFc+h7OjcPTfvpLo73A==',
+            '__VIEWSTATEGENERATOR':'087004E4',
+            'txtPersonIdent': '',
+            'txtPersonName': '',
+            'Button1': '查询'
+        }
+        #post_data['txtPersonName'] = input("请输入你的姓名：")
+        #post_data['txtPersonIdent'] = input("请输入你的身份证号：")
+        post_data['txtPersonName'] =ent_search.get()
+        post_data['txtPersonIdent'] =ent_type.get()
+        if not post_data['txtPersonName'] or not post_data['txtPersonIdent']:
+            showerror('警告', '请输入完整的姓名和身份证号')
+            return
+        wb_date_1 = s.post(url=url_1, data=post_data)
+        soup_1 = BeautifulSoup(wb_date_1.text, 'lxml')
+        company=soup_1.find_all('td')[22].get_text()
+        reg_name=soup_1.find_all('td')[23].get_text()
+        reg_type=soup_1.find_all('td')[24].get_text()
+        reg_time=soup_1.find_all('td')[25].get_text()
+        name = soup_1.find_all('td')[26].get_text()
+        fn=reg_time+'您(%s)在'%ent_search.get()+company+reg_type+"的"+reg_name+'目前所处状态：'+name
+        listBox.insert(END, fn)
+        #print(fn)
+    except:
+        showerror('警告', '请连接互联网或输入正确的姓名和身份证号')
+
+
+top = Tk()#创建窗口
+top.title('查询初始注册进度')#添加标题
+top.geometry('700x400+400+300')#设置窗口的大小，设置窗口的位置
+Label(top,text='注册执业中心个人注册进度查询（需联网）',font=('黑体',15,'bold')).grid(row=2,columnspan=6)
+Label(top,text='姓名：').grid(row=4,column=0)#添加控件时，一定要给控件字覆,grid(),x=0,y=0
+ent_search = Entry()#创建输入窗
+ent_search.grid(row=4,column=1)#显示/布局，pack
+Label(top,text='身份证号：').grid(row=4,column=3)
+ent_type= Entry(top)
+ent_type.grid(row=4,column=4)
+btn = Button(top,text='搜索',command=get_reg_status)
+btn.grid(row=4,column=5)
+listBox= Listbox(top,width=100)
+listBox.grid(row=6,columnspan=6)
+top.mainloop()#显示窗口
